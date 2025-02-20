@@ -31,5 +31,6 @@ export default defineConfig({
   server: {
     // @ts-ignore
     allowedHosts: true,
+    historyApiFallback: true // Enable history fallback for client-side routing
   }
 });
