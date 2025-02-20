@@ -29,9 +29,8 @@ export default defineConfig({
     },
   },
   server: {
-    //@ts-ignore
-    historyApiFallback: true,
-    contentBase: './',
-    hot: true
-    }
+    // @ts-ignore
+    allowedHosts: true,
+    historyApiFallback: true // Enable history fallback for client-side routing
+  }
 });
