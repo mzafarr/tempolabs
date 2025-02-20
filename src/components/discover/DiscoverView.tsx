@@ -83,16 +83,15 @@ export default function DiscoverView() {
     // If it's a right swipe or superlike, check if there's a mutual match
     if (direction === "right" || direction === "superlike") {
       // Check if the other person has already swiped right on us
-      const { data: existingSwipe } = await supabase
+      const { data: existingSwipes } = await supabase
         .from("swipes")
         .select("*")
         .eq("swiper_id", currentProfile.id)
         .eq("swiped_id", user.id)
-        .eq("direction", direction === "superlike" ? "superlike" : "right")
-        .single();
+        .or(`direction.eq.right,direction.eq.superlike`);
 
       // If they have, create a match!
-      if (existingSwipe) {
+      if (existingSwipes && existingSwipes.length > 0) {
         const { error: matchError } = await supabase.from("matches").insert({
           user1_id: user.id,
           user2_id: currentProfile.id,
