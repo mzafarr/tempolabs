@@ -29,6 +29,7 @@ export default function DiscoverView() {
         .from("profiles")
         .select("*")
         .neq("id", user.id);
+        
 
       if (profilesError) {
         console.error("Error fetching profiles:", profilesError);
@@ -40,7 +41,6 @@ export default function DiscoverView() {
         .from("swipes")
         .select("swiped_id")
         .eq("swiper_id", user.id);
-
       const swipedIds = new Set(swipedData?.map((s) => s.swiped_id) || []);
 
       // Filter out swiped profiles
@@ -64,22 +64,19 @@ export default function DiscoverView() {
   const currentProfile =
     currentIndex < profiles.length ? profiles[currentIndex] : null;
 
-  const handleSwipe = async (direction: "left" | "right" | "superlike") => {
+  const handleSwipe = async (direction: "left" | "right") => {
     if (!currentProfile || !user) return;
 
-    // Save the swipe
-    console.log("[Swipe Creation] Creating new swipe:", {
-      swiper_id: user.id,
-      swiped_id: currentProfile.id,
-      direction: direction
-    });
-
-    const { data: newSwipe, error: swipeError } = await supabase.from("swipes").insert({
-      swiper_id: user.id,
-      swiped_id: currentProfile.id,
-      direction: direction,
-      created_at: new Date().toISOString(),
-    }).select();
+    // Create the swipe record
+    const { data: newSwipe, error: swipeError } = await supabase
+      .from("swipes")
+      .insert({
+        swiper_id: user.id,
+        swiped_id: currentProfile.id,
+        direction: direction,
+        created_at: new Date().toISOString(),
+      })
+      .select();
 
     console.log("[Swipe Creation] Result:", { newSwipe, swipeError });
 
@@ -88,115 +85,35 @@ export default function DiscoverView() {
       return;
     }
 
-    // If it's a right swipe or superlike, check if there's a mutual match
-    if (direction === "right" || direction === "superlike") {
-      console.log("[Match Check] Starting mutual match check:", {
-        currentUser: user.id,
-        swipedProfile: currentProfile.id,
-        direction: direction,
-        timestamp: new Date().toISOString()
-      });
+    // If the current swipe is a "right" or "superlike", check for a reciprocal right swipe
+    if (direction === "right") {
+      const { data: reciprocalSwipe, error: reciprocalError } = await supabase
+        .from("swipes")
+        .select("*")
+        .eq("swiper_id", currentProfile.id)
+        .eq("swiped_id", user.id)
+        .eq("direction", "right")
+        .single();
 
-      try {
-        // Check if the other person has already swiped right on us
-        console.log("[Match Check] Checking for existing swipes with params:", {
-          swiper_id: currentProfile.id,
-          swiped_id: user.id,
-          directions: ["right", "superlike"]
-        });
+      if (!reciprocalError && reciprocalSwipe) {
+        // Create match record assuming matches table accepts user1_id, user2_id, and created_at
+        const { data: matchData, error: matchError } = await supabase
+          .from("matches")
+          .insert({
+            user1_id: user.id,
+            user2_id: currentProfile.id,
+            created_at: new Date().toISOString(),
+          })
+          .select();
 
-        const { data: existingSwipes, error: existingSwipesError } = await supabase
-          .from("swipes")
-          .select("*, profiles!swipes_swiper_id_fkey(*)")
-          .eq("swiper_id", currentProfile.id)
-          .eq("swiped_id", user.id)
-          .in("direction", ["right", "superlike"]);
+        console.log("[Match Creation] Result:", { matchData, matchError });
 
-        // Log the raw response for debugging
-        console.log("[Match Check] Raw swipes query response:", {
-          existingSwipes,
-          existingSwipesError,
-          queryTime: new Date().toISOString()
-        });
-
-        if (existingSwipesError) {
-          throw new Error(`Error checking existing swipes: ${existingSwipesError.message}`);
+        if (matchError) {
+          console.error("Error creating match:", matchError);
         }
-
-        console.log("[Match Check] Found existing swipes:", {
-          currentUserId: user.id,
-          otherUserId: currentProfile.id,
-          swipeCount: existingSwipes?.length || 0,
-          swipes: existingSwipes,
-          timestamp: new Date().toISOString()
-        });
-
-        // If they have, check for existing match first
-        if (existingSwipes && existingSwipes.length > 0) {
-          console.log("[Match Check] Found mutual swipe, checking for existing match...");
-          // Check if match already exists
-          const { data: existingMatch, error: existingMatchError } = await supabase
-            .from("matches")
-            .select("*")
-            .or(`and(user1_id.eq.${user.id},user2_id.eq.${currentProfile.id}),and(user1_id.eq.${currentProfile.id},user2_id.eq.${user.id}))`)
-            .single();
-
-          if (existingMatchError) {
-            console.error("[Match Check] Error checking existing match:", existingMatchError);
-            return;
-          }
-
-          if (existingMatch) {
-            console.log("[Match Check] Match already exists:", {
-              match: existingMatch,
-              timestamp: new Date().toISOString()
-            });
-            return;
-          }
-
-          console.log("[Match Creation] Creating new match:", {
-            user1: user.id,
-            user2: currentProfile.id,
-            matchTrigger: "mutual swipe",
-            timestamp: new Date().toISOString()
-          });
-
-          const { data: newMatch, error: matchError } = await supabase
-            .from("matches")
-            .insert({
-              user1_id: user.id,
-              user2_id: currentProfile.id,
-              status: "matched",
-              match_percentage: 0,
-              created_at: new Date().toISOString(),
-            })
-            .select();
-
-          if (matchError) {
-            console.error("[Match Creation] Error creating match:", {
-              error: matchError,
-              timestamp: new Date().toISOString()
-            });
-            throw new Error(`Error creating match: ${matchError.message}`);
-          }
-
-          console.log("[Match Creation] Successfully created match:", {
-            match: newMatch,
-            timestamp: new Date().toISOString()
-          });
-        }
-      } catch (error) {
-        console.error("[Match Check] Error in match checking process:", {
-          error,
-          timestamp: new Date().toISOString()
-        });
       }
-
-      // Move to next profile
-      setCurrentIndex((prev) => prev + 1);
     }
 
-    // Move to next profile
     setCurrentIndex((prev) => prev + 1);
   };
 
@@ -278,7 +195,7 @@ export default function DiscoverView() {
             profile={currentProfile}
             onSwipeLeft={() => handleSwipe("left")}
             onSwipeRight={() => handleSwipe("right")}
-            onSuperLike={() => handleSwipe("superlike")}
+            onSuperLike={() => handleSwipe("right")}
             onBoost={handleBoost}
             onInfo={handleInfo}
           />
