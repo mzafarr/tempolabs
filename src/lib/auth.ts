@@ -67,10 +67,6 @@ export async function updateProfile(profile: Partial<Profile>) {
     .from("profiles")
     .update({
       ...profile,
-      gender: profile.gender,
-      age: profile.age,
-      country: profile.country,
-      languages: profile.languages,
       updated_at: new Date().toISOString(),
     })
     .eq("id", user.id);

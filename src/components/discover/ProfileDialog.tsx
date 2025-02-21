@@ -15,7 +15,7 @@ const SECTIONS = [
     title: "Roles",
     emoji: "💼",
     key: "role",
-    color: "bg-blue-500/20 text-white",
+    color: "bg-primary/20 text-white",
   },
   {
     title: "Skills",
@@ -59,7 +59,7 @@ export default function ProfileDialog({
           <div className="relative h-64">
             <img
               src={
-                profile.photo_url ||
+                profile.photo_urls?.[0] ||
                 `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.id}`
               }
               alt={profile.name || "Profile"}
@@ -70,12 +70,12 @@ export default function ProfileDialog({
               <h2 className="text-2xl font-bold text-white">
                 {profile.name || "Anonymous"}
               </h2>
-              {profile.role && profile.role[0] && (
+              {profile.roles && profile.roles[0] && (
                 <Badge
                   variant="secondary"
-                  className="mt-2 bg-blue-500/80 text-white"
+                  className="mt-2 bg-primary/80 text-white"
                 >
-                  {profile.role[0]}
+                  {profile.roles[0]}
                 </Badge>
               )}
             </div>

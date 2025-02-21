@@ -8,18 +8,18 @@ import { updateProfile } from "@/lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
-type Step =
+export type Step =
   | "welcome"
   | "basicInfo"
   | "role"
   | "experience"
   | "techInterests"
-  | "skills"
+  // | "skills"
   | "lookingFor"
   | "collabPrefs"
   | "bio"
-  | "photo"
-  | "linkedin"
+  // | "photo"
+  | "socialLinks"
   | "review";
 
 interface OnboardingCardProps {
@@ -33,12 +33,12 @@ const steps: Step[] = [
   "role",
   "experience",
   "techInterests",
-  "skills",
+  // "skills",
   "lookingFor",
   "collabPrefs",
   "bio",
-  "photo",
-  "linkedin",
+  // "photo",
+  "socialLinks",
   "review",
 ];
 
@@ -59,18 +59,23 @@ export default function OnboardingCard({
         await updateProfile({
           name: data.basicInfo.name,
           email: data.basicInfo.email,
-          role: data.roles,
+          roles: data.roles,
           stage: data.stage,
           interests: data.interests,
           skills: data.skills,
-          looking_for: data.lookingFor,
+          skills_looking_for: data.skillsLookingFor,
+          languages_looking_for: data.languagesLookingFor,
+          countries_looking_for: data.countriesLookingFor,
           bio: data.bio,
-          photo_url: data.photoUrl,
+          photo_urls: data.photoUrls,
+
+          github_url: data.githubUrl,
           linkedin_url: data.linkedinUrl,
-          website_url: data.websiteUrl,
           twitter_url: data.twitterUrl,
+          tiktok_url: data.tiktokUrl,
           instagram_url: data.instagramUrl,
           youtube_url: data.youtubeUrl,
+          other_url: data.otherUrl,
         });
         navigate("/discover");
         return;
@@ -101,12 +106,12 @@ export default function OnboardingCard({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-screen mx-auto">
       <ProgressBar
         currentStep={currentStepIndex + 1}
         totalSteps={steps.length}
       />
-      <Card className="w-[480px] bg-white shadow-lg rounded-xl flex flex-col h-[600px] overflow-hidden">
+      <Card className="max-w-[90vw] w-[600px] min-h-[600px] mx-auto bg-white shadow-lg rounded-xl flex flex-col">
         <div className="flex-1">
           <StepContent step={step} />
         </div>

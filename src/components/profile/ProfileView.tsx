@@ -33,13 +33,13 @@ export default function ProfileView() {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Cover Image and Profile Section */}
         <Card className="relative overflow-hidden">
-          <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-500" />
+          <div className="h-48 bg-gradient-to-r from-primary to-purple-500" />
           <div className="p-6 pb-8">
             <div className="flex justify-between">
               <div className="flex gap-6">
                 <img
                   src={
-                    profile.photo_url ||
+                    profile.photo_urls?.[0] ||
                     `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.id}`
                   }
                   alt={profile.name || "Profile"}
@@ -47,9 +47,9 @@ export default function ProfileView() {
                 />
                 <div className="space-y-1">
                   <h1 className="text-2xl font-bold">{profile.name}</h1>
-                  {profile.role?.[0] && (
+                  {profile.roles?.[0] && (
                     <Badge variant="secondary" className="text-base">
-                      {profile.role[0]}
+                      {profile.roles[0]}
                     </Badge>
                   )}
                 </div>
@@ -121,14 +121,14 @@ export default function ProfileView() {
           <Card className="p-6">
             <h2 className="text-lg font-semibold mb-4">Looking For</h2>
             <div className="flex flex-wrap gap-2">
-              {profile.looking_for
+              {profile.skills_looking_for
                 ?.filter((item) => !item.includes("same_"))
                 .map((item) => (
                   <Badge key={item} variant="outline" className="bg-blue-50">
                     {item}
                   </Badge>
                 ))}
-            </div>
+            </div>  
           </Card>
 
           {/* Stage Section */}

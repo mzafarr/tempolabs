@@ -16,8 +16,15 @@ interface ReviewStepProps {
     skills: string[];
     lookingFor: string[];
     bio: string;
-    photoUrl: string;
-    linkedinUrl: string;
+    photoUrls?: string[];
+    
+    linkedinUrl?: string;
+    websiteUrl?: string;
+    twitterUrl?: string;
+    githubUrl?: string;
+    tiktokUrl?: string;
+    instagramUrl?: string;
+    youtubeUrl?: string;
   };
 }
 
@@ -37,7 +44,7 @@ export default function ReviewStep({ data }: ReviewStepProps) {
         <div className="flex items-center gap-4">
           <img
             src={
-              data.photoUrl ||
+              data.photoUrls[0] ||
               `https://api.dicebear.com/7.x/avataaars/svg?seed=default`
             }
             alt={data.basicInfo.name}
@@ -101,7 +108,7 @@ export default function ReviewStep({ data }: ReviewStepProps) {
                 href={data.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
+                className="text-primary hover:underline"
               >
                 View Profile
               </a>

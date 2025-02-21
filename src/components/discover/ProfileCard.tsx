@@ -83,7 +83,7 @@ export default function ProfileCard({
           <motion.div className="absolute inset-0" style={{ opacity, scale }}>
             <img
               src={
-                profile.photo_url ||
+                profile.photo_urls[0] ||
                 `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.id}`
               }
               alt={profile.name}
@@ -114,9 +114,9 @@ export default function ProfileCard({
               <h2 className="text-2xl font-bold">
                 {profile.name || "Anonymous"}
               </h2>
-              {profile.role && profile.role.length > 0 && (
-                <Badge variant="secondary" className="bg-blue-500">
-                  {profile.role[0]}
+              {profile.roles && profile.roles.length > 0 && (
+                <Badge variant="secondary" className="bg-primary">
+                  {profile.roles[0]}
                 </Badge>
               )}
             </div>
@@ -165,7 +165,7 @@ export default function ProfileCard({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-14 w-14 rounded-full border-2 border-blue-500 bg-white/10 hover:bg-blue-500 hover:text-white"
+                  className="h-14 w-14 rounded-full border-2 border-primary bg-white/10 hover:bg-primary hover:text-white"
                   onClick={() => setShowDetails(true)}
                 >
                   <Info className="h-8 w-8" />

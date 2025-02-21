@@ -37,7 +37,7 @@ export default function MatchesView() {
     const fetchData = async () => {
       if (!user) return;
 
-      // Fetch matches
+      // Fetch matches with both user profiles
       const { data: matchesData, error: matchesError } = await supabase
         .from("matches")
         .select(
@@ -48,8 +48,17 @@ export default function MatchesView() {
           created_at,
           user1_id,
           user2_id,
-          profiles!matches_user2_id_fkey (*)
-        `,
+          user1:profiles!matches_user1_id_fkey (
+            id, name, photo_url, role, interests, age, country, created_at, 
+            email, gender, instagram_url, languages, linkedin_url, 
+            looking_for, twitter_url, website_url, youtube_url
+          ),
+          user2:profiles!matches_user2_id_fkey (
+            id, name, photo_url, role, interests, age, country, created_at, 
+            email, gender, instagram_url, languages, linkedin_url, 
+            looking_for, twitter_url, website_url, youtube_url
+          )
+        `
         )
         .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
         .order("created_at", { ascending: false });
@@ -58,6 +67,18 @@ export default function MatchesView() {
         console.error("Error fetching matches:", matchesError);
         return;
       }
+
+      // Transform matches data - select the other user's profile
+      const transformedMatches = matchesData.map((match) => ({
+        id: match.id,
+        //@ts-ignore
+        user: (match.user1_id === user.id ? match.user2 : match.user1) as Profile,
+        status: match.status || "pending",
+        match_percentage: match.match_percentage || 0,
+        created_at: match.created_at,
+      }));
+
+      setMatches(transformedMatches);
 
       // Fetch swipes
       const { data: swipesData, error: swipesError } = await supabase
@@ -78,15 +99,6 @@ export default function MatchesView() {
         console.error("Error fetching swipes:", swipesError);
         return;
       }
-
-      // Transform matches data
-      const transformedMatches = matchesData.map((match) => ({
-        id: match.id,
-        user: match.profiles[0] as Profile, // Access first element of the array
-        status: match.status || "pending",
-        match_percentage: match.match_percentage || 0,
-        created_at: match.created_at,
-      }));
 
       // Transform swipes data
       const rightSwipes = swipesData
@@ -134,7 +146,7 @@ export default function MatchesView() {
         <div className="flex items-start gap-4">
           <img
             src={
-              profile.photo_url ||
+              profile.photo_urls?.[0] ||
               `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.id}`
             }
             alt={profile.name || "User"}
@@ -145,7 +157,7 @@ export default function MatchesView() {
               <div>
                 <h3 className="font-semibold">{profile.name || "Anonymous"}</h3>
                 <p className="text-sm text-gray-500">
-                  {profile.role?.[0] || "No role specified"}
+                  {profile.roles?.[0] || "No role specified"}
                 </p>
                 {subtitle && (
                   <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>

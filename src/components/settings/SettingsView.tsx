@@ -27,7 +27,7 @@ export default function SettingsView() {
         updateData("skills", profile.skills || []);
         updateData("lookingFor", profile.looking_for || []);
         updateData("bio", profile.bio || "");
-        updateData("photoUrl", profile.photo_url || "");
+        updateData("photoUrls", profile.photo_urls || []);
         updateData("linkedinUrl", profile.linkedin_url || "");
       }
     };

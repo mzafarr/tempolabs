@@ -9,28 +9,60 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
+import { MultipleSelector } from "@/components/ui/multiple-selector";
+
+const languageOptions = [
+  { value: "English", label: "English", category: "Common" },
+  { value: "Spanish", label: "Spanish", category: "Common" },
+  { value: "Mandarin", label: "Mandarin", category: "Asian" },
+  { value: "Hindi", label: "Hindi", category: "Asian" },
+  { value: "Arabic", label: "Arabic", category: "Middle Eastern" },
+  { value: "French", label: "French", category: "European" },
+  { value: "German", label: "German", category: "European" },
+  { value: "Japanese", label: "Japanese", category: "Asian" },
+  { value: "Korean", label: "Korean", category: "Asian" },
+  { value: "Portuguese", label: "Portuguese", category: "European" },
+  { value: "Russian", label: "Russian", category: "European" },
+  { value: "Italian", label: "Italian", category: "European" },
+];
+
+const countryOptions = [
+  { value: "United States", label: "🇺🇸 United States" },
+  { value: "United Kingdom", label: "🇬🇧 United Kingdom" },
+  { value: "Canada", label: "🇨🇦 Canada" },
+  { value: "Australia", label: "🇦🇺 Australia" },
+  { value: "Germany", label: "🇩🇪 Germany" },
+  { value: "France", label: "🇫🇷 France" },
+  { value: "India", label: "🇮🇳 India" },
+  { value: "China", label: "🇨🇳 China" },
+  { value: "Japan", label: "🇯🇵 Japan" },
+  { value: "Brazil", label: "🇧🇷 Brazil" },
+  { value: "Singapore", label: "🇸🇬 Singapore" },
+  { value: "UAE", label: "🇦🇪 UAE" },
+];
 
 interface LookingForStepProps {
   data: {
-    lookingFor: string[];
+    skillsLookingFor?: string[];
+    languagesLookingFor?: string[];
+    countriesLookingFor?: string[];
   };
   updateData: (field: string, value: any) => void;
 }
 
 const skillCategories = {
-  "Business/Management": [
+  "Business/Management 💼": [
     "Project Management",
-    "Business Strategy",
+    "Business Strategy", 
     "Finance",
     "Leadership",
     "Operations",
     "Consulting",
   ],
-  "Technology/Engineering": [
+  "Technology/Engineering 💻": [
     "Python",
-    "JavaScript",
+    "JavaScript", 
     "Data Science",
     "AI",
     "Machine Learning",
@@ -42,31 +74,31 @@ const skillCategories = {
     "Cybersecurity",
     "Cloud Computing",
   ],
-  "Content Creator": [
+  "Content Creator 🎥": [
     "Blogging",
     "YouTube",
     "TikTok",
-    "Podcasting",
+    "Podcasting", 
     "Content Strategy",
     "Video Editing",
   ],
-  "Design/Product": [
+  "Design/Product 🎨": [
     "UI/UX",
     "Product Development",
     "Graphic Design",
     "User Research",
     "Prototyping",
   ],
-  Investor: [
+  "Investor 💰": [
     "Angel Investor",
     "Venture Capitalist",
     "Crowdfunding Expert",
     "Financial Analysis",
   ],
-  "Marketing/Sales": [
+  "Marketing/Sales 📢": [
     "Facebook Ads",
     "Copywriting",
-    "Lead Generation",
+    "Lead Generation", 
     "SEO/SEM",
     "Social Media Marketing",
     "Email Marketing",
@@ -78,21 +110,23 @@ export default function LookingForStep({
   updateData,
 }: LookingForStepProps) {
   const [customSkills, setCustomSkills] = useState<{ [key: string]: string }>(
-    {},
+    {}
   );
 
   const handleSkillToggle = (skill: string) => {
-    const newSkills = data.lookingFor.includes(skill)
-      ? data.lookingFor.filter((s) => s !== skill)
-      : [...data.lookingFor, skill];
-    updateData("lookingFor", newSkills);
+    const currentSkills = data.skillsLookingFor || [];
+    const newSkills = currentSkills.includes(skill)
+      ? currentSkills.filter((s) => s !== skill)
+      : [...currentSkills, skill];
+    updateData("skillsLookingFor", newSkills);
   };
 
   const handleAddCustomSkill = (category: string) => {
     if (customSkills[category]?.trim()) {
       const newSkill = `${category}:${customSkills[category].trim()}`;
-      if (!data.lookingFor.includes(newSkill)) {
-        updateData("lookingFor", [...data.lookingFor, newSkill]);
+      const currentSkills = data.skillsLookingFor || [];
+      if (!currentSkills.includes(newSkill)) {
+        updateData("skillsLookingFor", [...currentSkills, newSkill]);
       }
       setCustomSkills({ ...customSkills, [category]: "" });
     }
@@ -106,9 +140,11 @@ export default function LookingForStep({
     >
       <div className="space-y-2">
         <h2 className="text-2xl font-bold">
-          What Type of People Are You Looking For? 🤝
+          Who Are You Looking For? 🤝
         </h2>
-        <p className="text-gray-600">Select all that apply</p>
+        <p className="text-gray-600">
+          Select desired skills for potential matches
+        </p>
       </div>
 
       <Accordion type="single" collapsible className="w-full space-y-2">
@@ -117,14 +153,17 @@ export default function LookingForStep({
             <AccordionTrigger className="text-left hover:no-underline hover:bg-slate-50 rounded-lg px-4">
               <div className="flex items-center gap-2">
                 <span>{category}</span>
-                {data.lookingFor.some(
-                  (s) => s.startsWith(category + ":") || skills.includes(s),
+                {(data.skillsLookingFor || []).some(
+                  (s) => s.startsWith(category + ":") || skills.includes(s)
                 ) && (
-                  <Badge variant="secondary" className="ml-2">
+                  <Badge
+                    variant="secondary"
+                    className="ml-2 bg-primary/10 hover:bg-primary/20 border-primary/5 text-primary font-normal"
+                  >
                     {
-                      data.lookingFor.filter(
+                      (data.skillsLookingFor || []).filter(
                         (s) =>
-                          s.startsWith(category + ":") || skills.includes(s),
+                          s.startsWith(category + ":") || skills.includes(s)
                       ).length
                     }
                   </Badge>
@@ -138,9 +177,11 @@ export default function LookingForStep({
                     <Badge
                       key={skill}
                       variant={
-                        data.lookingFor.includes(skill) ? "default" : "outline"
+                        (data.skillsLookingFor || []).includes(skill)
+                          ? "default"
+                          : "outline"
                       }
-                      className="cursor-pointer text-sm py-1 px-3"
+                      className="cursor-pointer font-normal text-[13.5px] py-0.5 px-3 bg-primary/10 hover:bg-primary/20 border-primary/5 text-primary"
                       onClick={() => handleSkillToggle(skill)}
                     >
                       {skill}
@@ -176,15 +217,15 @@ export default function LookingForStep({
         ))}
       </Accordion>
 
-      {data.lookingFor.length > 0 && (
+      {(data.skillsLookingFor || []).length > 0 && (
         <div className="pt-4">
-          <Label>Selected Skills</Label>
+          <Label className="text-base font-semibold">Selected Skills</Label>
           <div className="flex flex-wrap gap-2 mt-2">
-            {data.lookingFor.map((skill) => (
+            {(data.skillsLookingFor || []).map((skill) => (
               <Badge
                 key={skill}
                 variant="default"
-                className="cursor-pointer text-sm py-1 px-3"
+                className="cursor-pointer text-[13.5px] py-0.5 px-3 bg-primary/10 hover:bg-primary/20 border-primary/5 text-primary font-normal"
                 onClick={() => handleSkillToggle(skill)}
               >
                 {skill.includes(":") ? skill.split(":")[1] : skill}
@@ -205,49 +246,57 @@ export default function LookingForStep({
 
       <div className="space-y-4 pt-4">
         <div className="space-y-4">
-          <Label>Language Consistency Preference</Label>
-          <RadioGroup
-            value={data.lookingFor.includes("same_language") ? "yes" : "no"}
-            onValueChange={(value) => {
-              const newLookingFor = data.lookingFor.filter(
-                (p) => p !== "same_language",
-              );
-              if (value === "yes") newLookingFor.push("same_language");
-              updateData("lookingFor", newLookingFor);
-            }}
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="yes" id="same_language_yes" />
-              <Label htmlFor="same_language_yes">Yes</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="no" id="same_language_no" />
-              <Label htmlFor="same_language_no">No</Label>
-            </div>
-          </RadioGroup>
-        </div>
+          <div className="space-y-2">
+            <Label className="text-base font-semibold">
+              Languages{" "}
+              <span className="text-sm text-muted-foreground font-normal">
+                {" (Leave empty if open to all languages)"}
+              </span>
+            </Label>
+            <MultipleSelector
+              placeholder="Select languages..."
+              defaultOptions={languageOptions}
+              value={
+                data.languagesLookingFor?.map((lang) => ({
+                  value: lang,
+                  label: lang,
+                })) || []
+              }
+              groupBy="category"
+              onChange={(newValue) => {
+                updateData(
+                  "languagesLookingFor",
+                  newValue.map((item) => item.value)
+                );
+              }}
+              className="w-full"
+            />
+          </div>
 
-        <div className="space-y-4">
-          <Label>Country/Location Preference</Label>
-          <RadioGroup
-            value={data.lookingFor.includes("same_country") ? "yes" : "no"}
-            onValueChange={(value) => {
-              const newLookingFor = data.lookingFor.filter(
-                (p) => p !== "same_country",
-              );
-              if (value === "yes") newLookingFor.push("same_country");
-              updateData("lookingFor", newLookingFor);
-            }}
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="yes" id="same_country_yes" />
-              <Label htmlFor="same_country_yes">Yes</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="no" id="same_country_no" />
-              <Label htmlFor="same_country_no">No</Label>
-            </div>
-          </RadioGroup>
+          <div className="space-y-2">
+            <Label className="text-base font-semibold">Countries</Label>
+            <span className="text-sm text-muted-foreground font-normal">
+              {" (Leave empty if open to all countries)"}
+            </span>
+            <MultipleSelector
+              placeholder="Select countries..."
+              defaultOptions={countryOptions}
+              value={
+                data.countriesLookingFor?.map((country) => ({
+                  value: country,
+                  label: country,
+                })) || []
+              }
+              groupBy=""
+              onChange={(newValue) => {
+                updateData(
+                  "countriesLookingFor",
+                  newValue.map((item) => item.value)
+                );
+              }}
+              className="w-full"
+            />
+          </div>
         </div>
       </div>
     </motion.div>

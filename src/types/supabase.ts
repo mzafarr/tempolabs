@@ -99,20 +99,25 @@ export type Database = {
           gender: string | null
           bio: string | null
           id: string
-          instagram_url: string | null
           interests: string[] | null
           languages: string[] | null
-          linkedin_url: string | null
-          looking_for: string[] | null
+          skills_looking_for?: string[] | null
+          languages_looking_for?: string[] | null
+          countries_looking_for?: string[] | null
           name: string | null
-          photo_url: string | null
-          role: string[] | null
+          photo_urls: string[] | null
+          roles: string[] | null
           skills: string[] | null
           stage: string | null
-          twitter_url: string | null
-          updated_at: string
-          website_url: string | null
-          youtube_url: string | null
+
+          website_url?: string | null
+          github_url?: string | null
+          linkedin_url?: string | null
+          twitter_url?: string | null
+          tiktok_url?: string | null
+          instagram_url?: string | null
+          youtube_url?: string | null
+          other_url?: string | null
         }
         Insert: {
           age?: string | null
@@ -122,20 +127,27 @@ export type Database = {
           gender?: string | null
           bio?: string | null
           id: string
-          instagram_url?: string | null
           interests?: string[] | null
           languages?: string[] | null
-          linkedin_url?: string | null
-          looking_for?: string[] | null
+          skills_looking_for?: string[] | null
+          languages_looking_for?: string[] | null
+          countries_looking_for?: string[] | null
           name?: string | null
-          photo_url?: string | null
-          role?: string[] | null
+          photo_urls?: string[] | null
+          roles?: string[] | null
           skills?: string[] | null
           stage?: string | null
-          twitter_url?: string | null
           updated_at?: string
+
           website_url?: string | null
+          github_url?: string | null
+          linkedin_url?: string | null
+          twitter_url?: string | null
+          tiktok_url?: string | null
+          instagram_url?: string | null
           youtube_url?: string | null
+          other_url?: string | null
+
         }
         Update: {
           age?: string | null
@@ -145,20 +157,26 @@ export type Database = {
           gender?: string | null
           bio?: string | null
           id?: string
-          instagram_url?: string | null
           interests?: string[] | null
           languages?: string[] | null
-          linkedin_url?: string | null
-          looking_for?: string[] | null
+          skills_looking_for?: string[] | null
+          languages_looking_for?: string[] | null
+          countries_looking_for?: string[] | null
           name?: string | null
           photo_url?: string | null
           role?: string[] | null
           skills?: string[] | null
           stage?: string | null
-          twitter_url?: string | null
           updated_at?: string
+
           website_url?: string | null
+          github_url?: string | null
+          linkedin_url?: string | null
+          twitter_url?: string | null
+          tiktok_url?: string | null
+          instagram_url?: string | null
           youtube_url?: string | null
+          other_url?: string | null
         }
         Relationships: []
       }

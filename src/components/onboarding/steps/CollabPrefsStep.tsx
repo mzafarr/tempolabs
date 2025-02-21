@@ -54,7 +54,7 @@ export default function CollabPrefsStep({
             whileTap={{ scale: 0.98 }}
           >
             <button
-              className={`w-full p-4 rounded-lg border-2 transition-all ${data.lookingFor.includes(pref.value) ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-blue-200"}`}
+              className={`w-full p-4 rounded-lg border-2 transition-all ${data.lookingFor.includes(pref.value) ? "border-primary bg-blue-50" : "border-gray-200 hover:border-blue-200"}`}
               onClick={() => {
                 const newPrefs = data.lookingFor.includes(pref.value)
                   ? data.lookingFor.filter((p) => p !== pref.value)

@@ -37,7 +37,7 @@ const ProgressBar = ({
         transition={{ duration: 0.3 }}
       >
         <motion.div
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+          className="h-full bg-gradient-to-r from-primary to-purple-500"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}

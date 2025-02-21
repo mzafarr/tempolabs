@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "./AuthContext";
 
 type OnboardingData = {
@@ -10,23 +10,29 @@ type OnboardingData = {
     country?: string;
     languages?: string[];
   };
+  skillsLookingFor?: string[];
+  languagesLookingFor?: string[];
+  countriesLookingFor?: string[];
   roles: string[];
   stage: string;
   interests: string[];
   skills: string[];
   lookingFor: string[];
   bio: string;
-  photoUrl: string;
-  linkedinUrl: string;
-  websiteUrl: string;
-  twitterUrl: string;
-  instagramUrl: string;
-  youtubeUrl: string;
+  photoUrls?: string[];
+  linkedinUrl?: string;
+  websiteUrl?: string;
+  twitterUrl?: string;
+  githubUrl?: string;
+  tiktokUrl?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+  otherUrl?: string;
 };
 
 type OnboardingContextType = {
   data: OnboardingData;
-  updateData: (field: keyof OnboardingData, value: any) => void;
+  updateData: <K extends keyof OnboardingData>(field: K, value: OnboardingData[K]) => void;
 };
 
 const defaultData: OnboardingData = {
@@ -40,40 +46,39 @@ const defaultData: OnboardingData = {
   skills: [],
   lookingFor: [],
   bio: "",
-  photoUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=default",
+  photoUrls: [],
   linkedinUrl: "",
   websiteUrl: "",
   twitterUrl: "",
   instagramUrl: "",
   youtubeUrl: "",
+  githubUrl: "",
+  otherUrl: "",
 };
 
-const OnboardingContext = createContext<OnboardingContextType | undefined>(
-  undefined,
-);
+const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
 
-export function OnboardingProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function OnboardingProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<OnboardingData>(defaultData);
   const { user } = useAuth();
 
-  // Reset data when user changes
   useEffect(() => {
-    setData(defaultData);
+    if (user?.id) {
+      setData(defaultData);
+    }
   }, [user?.id]);
 
-  const updateData = (field: keyof OnboardingData, value: any) => {
+  const updateData = useCallback(<K extends keyof OnboardingData>(field: K, value: OnboardingData[K]) => {
     setData((prev) => ({
       ...prev,
       [field]: value,
     }));
-  };
+  }, []);
+
+  const contextValue = useMemo(() => ({ data, updateData }), [data, updateData]);
 
   return (
-    <OnboardingContext.Provider value={{ data, updateData }}>
+    <OnboardingContext.Provider value={contextValue}>
       {children}
     </OnboardingContext.Provider>
   );

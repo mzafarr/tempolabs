@@ -9,8 +9,8 @@ import SkillsStep from "./steps/SkillsStep";
 import LookingForStep from "./steps/LookingForStep";
 import CollabPrefsStep from "./steps/CollabPrefsStep";
 import BioStep from "./steps/BioStep";
-import PhotoStep from "./steps/PhotoStep";
-import LinkedinStep from "./steps/LinkedinStep";
+// import PhotoStep from "./steps/PhotoStep";
+import SocialLinksStep from "./steps/SocialLinksStep";
 import ReviewStep from "./steps/ReviewStep";
 
 interface StepContentProps {
@@ -25,7 +25,7 @@ interface StepContentProps {
     | "collabPrefs"
     | "bio"
     | "photo"
-    | "linkedin"
+    | "socialLinks"
     | "review";
 }
 
@@ -61,11 +61,11 @@ export default function StepContent({ step = "welcome" }: StepContentProps) {
       case "bio":
         return <BioStep data={data} updateData={updateData} />;
 
-      case "photo":
-        return <PhotoStep data={data} updateData={updateData} />;
+      // case "photo":
+      //   return <PhotoStep data={data} updateData={updateData} />;
 
-      case "linkedin":
-        return <LinkedinStep data={data} updateData={updateData} />;
+      case "socialLinks":
+        return <SocialLinksStep data={data} updateData={updateData} />;
 
       case "review":
         return <ReviewStep data={data} />;
@@ -81,7 +81,7 @@ export default function StepContent({ step = "welcome" }: StepContentProps) {
   };
 
   return (
-    <div className="p-6 overflow-y-auto max-h-[calc(600px-88px)]">
+    <div className="p-6 ">
       {renderStepContent()}
     </div>
   );

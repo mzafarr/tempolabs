@@ -45,14 +45,14 @@ const NavigationButtons = ({
         <Button
           onClick={onNext}
           disabled={!canGoNext}
-          className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white transition-all duration-300 cursor-pointer relative z-10"
+          className="flex items-center gap-2 bg-gradient-to-r from-primary to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white transition-all duration-300 cursor-pointer relative z-10"
         >
           {nextLabel}
           <ArrowRight className="h-4 w-4" />
         </Button>
         {canGoNext && (
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-md blur pointer-events-none"
+            className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-md blur pointer-events-none"
             animate={{
               opacity: [0.5, 0.8, 0.5],
               scale: [1, 1.05, 1],

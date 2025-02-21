@@ -77,7 +77,7 @@ function AppContent() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <AuthProvider>
@@ -86,5 +86,3 @@ function App() {
     </Suspense>
   );
 }
-
-export default App;

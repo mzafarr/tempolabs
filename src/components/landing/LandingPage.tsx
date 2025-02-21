@@ -28,7 +28,7 @@ export default function LandingPage() {
             <Button
               size="lg"
               onClick={() => navigate("/onboarding")}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-8"
+              className="bg-primary hover:bg-blue-600 text-white px-8"
             >
               Get Started
               <ArrowRight className="ml-2 h-5 w-5" />

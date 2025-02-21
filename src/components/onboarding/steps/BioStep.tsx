@@ -21,7 +21,7 @@ export default function BioStep({ data, updateData }: BioStepProps) {
       </div>
       <div className="space-y-4">
         <textarea
-          className="w-full h-32 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full h-32 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
           placeholder="Share your story, experience, and what you're looking for..."
           value={data.bio}
           onChange={(e) => updateData("bio", e.target.value)}
