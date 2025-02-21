@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import StepContent from "./StepContent";
 import ProgressBar from "./ProgressBar";
 import NavigationButtons from "./NavigationButtons";
 import { useOnboarding } from "@/contexts/OnboardingContext";
-import { updateProfile } from "@/lib/auth";
+import { updateProfile, getProfile } from "@/lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -48,7 +48,28 @@ export default function OnboardingCard({
 }: OnboardingCardProps) {
   const [step, setStep] = useState<Step>(currentStep);
   const navigate = useNavigate();
-  const { data } = useOnboarding();
+  const { data, updateData } = useOnboarding();
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const { data: profile } = await getProfile();
+      if (profile) {
+        updateData("basicInfo", {
+          name: profile.name || "",
+          email: profile.email || "",
+        });
+        updateData("roles", profile.role || []);
+        updateData("stage", profile.stage || "");
+        updateData("interests", profile.interests || []);
+        updateData("skills", profile.skills || []);
+        updateData("lookingFor", profile.looking_for || []);
+        updateData("bio", profile.bio || "");
+        updateData("photoUrls", profile.photo_urls || []);
+        updateData("linkedinUrl", profile.linkedin_url || "");
+      }
+    };
+    loadProfile();
+  }, []);
   const { toast } = useToast();
   const currentStepIndex = steps.indexOf(step);
 
@@ -58,17 +79,21 @@ export default function OnboardingCard({
       try {
         await updateProfile({
           name: data.basicInfo.name,
-          email: data.basicInfo.email,
+          age: data.basicInfo.age,
+          gender: data.basicInfo.gender,
+          country: data.basicInfo.country,
+          languages: data.basicInfo.languages,
           roles: data.roles,
           stage: data.stage,
           interests: data.interests,
           skills: data.skills,
-          skills_looking_for: data.skillsLookingFor,
-          languages_looking_for: data.languagesLookingFor,
-          countries_looking_for: data.countriesLookingFor,
           bio: data.bio,
           photo_urls: data.photoUrls,
 
+          skills_looking_for: data.skillsLookingFor,
+          languages_looking_for: data.languagesLookingFor,
+          countries_looking_for: data.countriesLookingFor,
+          
           github_url: data.githubUrl,
           linkedin_url: data.linkedinUrl,
           twitter_url: data.twitterUrl,
@@ -111,7 +136,7 @@ export default function OnboardingCard({
         currentStep={currentStepIndex + 1}
         totalSteps={steps.length}
       />
-      <Card className="max-w-[90vw] w-[600px] min-h-[600px] mx-auto bg-white shadow-lg rounded-xl flex flex-col">
+      <Card className="max-w-[94vw] w-[600px] min-h-[600px] mx-auto bg-white shadow-lg rounded-xl flex flex-col pb-8 md:pb-0">
         <div className="flex-1">
           <StepContent step={step} />
         </div>

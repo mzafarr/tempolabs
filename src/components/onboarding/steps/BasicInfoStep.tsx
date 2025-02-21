@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/select";
 import { MultipleSelector } from "@/components/ui/multiple-selector";
 import { cn } from "@/lib/utils";
+import { countryOptions } from "./constants";
+import LocationSelector from "@/components/ui/location-input";
 
 interface BasicInfoStepProps {
   data: {
@@ -45,7 +47,7 @@ export default function BasicInfoStep({
     >
       <h2 className="text-2xl font-bold">Let's get to know you! 👋</h2>
       <div className="flex flex-col gap-4 mb-6">
-        <div className="grid grid-cols-3 gap-4 w-full max-w-2xl">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-2xl">
           {[0, 1, 2].map((index) => (
             <div key={index} className="relative group aspect-square">
               {data.photoUrls[index] ? (
@@ -58,7 +60,10 @@ export default function BasicInfoStep({
                   <button
                     onClick={async () => {
                       try {
-                        const path = data.photoUrls[index].split("/").slice(-2).join("/");
+                        const path = data.photoUrls[index]
+                          .split("/")
+                          .slice(-2)
+                          .join("/");
                         const { error: deleteError } = await supabase.storage
                           .from("profile_photos")
                           .remove([path]);
@@ -109,11 +114,12 @@ export default function BasicInfoStep({
                         const fileExt = file.name.split(".").pop();
                         const fileName = `${user?.id}/${Date.now()}.${fileExt}`;
 
-                        const { data: uploadData, error } = await supabase.storage
-                          .from("profile_photos")
-                          .upload(fileName, file, {
-                            upsert: true,
-                          });
+                        const { data: uploadData, error } =
+                          await supabase.storage
+                            .from("profile_photos")
+                            .upload(fileName, file, {
+                              upsert: true,
+                            });
 
                         if (error) throw error;
 
@@ -135,7 +141,8 @@ export default function BasicInfoStep({
                         console.error("Error uploading photo:", error);
                         toast({
                           title: "Error",
-                          description: "Failed to upload photo. Please try again.",
+                          description:
+                            "Failed to upload photo. Please try again.",
                           variant: "destructive",
                         });
                       }
@@ -143,7 +150,9 @@ export default function BasicInfoStep({
                   />
                   <div className="text-center p-4">
                     <div className="text-3xl md:text-4xl mb-1">+</div>
-                    <p className="text-sm text-gray-600">Photo {index + 1}</p>
+                    <p className="text-xs sm:text-sm text-gray-600">
+                      Photo {index + 1}
+                    </p>
                     <p className="text-xs text-gray-400 mt-1">Max 5MB</p>
                   </div>
                 </label>
@@ -225,7 +234,9 @@ export default function BasicInfoStep({
                   )}
                 >
                   <span className="text-2xl mb-2">{age.emoji}</span>
-                  <span className="text-center font-medium text-sm">{age.label}</span>
+                  <span className="text-center font-medium text-sm">
+                    {age.label}
+                  </span>
                 </button>
               ))}
             </div>
@@ -233,41 +244,6 @@ export default function BasicInfoStep({
 
           <div className="space-y-4 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-base font-semibold">Country</Label>
-                <Select
-                  value={data.basicInfo.country || ""}
-                  onValueChange={(value) =>
-                    updateData("basicInfo", {
-                      ...data.basicInfo,
-                      country: value,
-                    })
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select your country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="United States">
-                      🇺🇸 United States
-                    </SelectItem>
-                    <SelectItem value="United Kingdom">
-                      🇬🇧 United Kingdom
-                    </SelectItem>
-                    <SelectItem value="Canada">🇨🇦 Canada</SelectItem>
-                    <SelectItem value="Australia">🇦🇺 Australia</SelectItem>
-                    <SelectItem value="Germany">🇩🇪 Germany</SelectItem>
-                    <SelectItem value="France">🇫🇷 France</SelectItem>
-                    <SelectItem value="India">🇮🇳 India</SelectItem>
-                    <SelectItem value="China">🇨🇳 China</SelectItem>
-                    <SelectItem value="Japan">🇯🇵 Japan</SelectItem>
-                    <SelectItem value="Brazil">🇧🇷 Brazil</SelectItem>
-                    <SelectItem value="Singapore">🇸🇬 Singapore</SelectItem>
-                    <SelectItem value="UAE">🇦🇪 UAE</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
               <div className="space-y-2">
                 <Label className="text-base font-semibold">
                   Languages You Speak
@@ -289,6 +265,30 @@ export default function BasicInfoStep({
                     })
                   }
                   className="w-full"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-base font-semibold">Country</Label>
+                {/* value={data.basicInfo.country || ""}
+                onValueChange={(value) =>
+                  updateData("basicInfo", {
+                    ...data.basicInfo,
+                    country: value,
+                  })
+                } */}
+                <LocationSelector
+                  onCountryChange={(value) =>
+                    updateData("basicInfo", {
+                      ...data.basicInfo,
+                      country: value,
+                    })
+                  }
+                  // onStateChange={(value) =>
+                  //   updateData("basicInfo", {
+                  //     ...data.basicInfo,
+                  //     country: value,
+                  //   })}
                 />
               </div>
             </div>

@@ -412,7 +412,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
           handleKeyDown(e);
           commandProps?.onKeyDown?.(e);
         }}
-        className={cn('h-auto overflow-visible bg-transparent', commandProps?.className)}
+        className={cn('h-auto overflow-visible bg-transparent ', commandProps?.className)}
         shouldFilter={
           commandProps?.shouldFilter !== undefined ? commandProps.shouldFilter : !onSearch
         }
@@ -420,7 +420,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
       >
         <div
           className={cn(
-            'min-h-10 rounded-md border border-input text-base md:text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
+            'min-h-10 rounded-md border border-input text-base md:text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 ',
             {
               'px-3 py-2': selected.length !== 0,
               'cursor-text': !disabled && selected.length !== 0,
@@ -521,7 +521,9 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
         <div className="relative">
           {open && (
             <CommandList
-              className="absolute top-1 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in"
+              className="absolute top-1 z-50 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in"
+              // className="absolute z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in data-[side=top]:bottom-full data-[side=top]:mb-2 data-[side=bottom]:top-1"
+              // data-side={dropdownRef.current && dropdownRef.current.getBoundingClientRect().bottom + 250 > window.innerHeight ? 'top' : 'bottom'}
               onMouseLeave={() => {
                 setOnScrollbar(false);
               }}
@@ -563,7 +565,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                                 onChange?.(newOptions);
                               }}
                               className={cn(
-                                'cursor-pointer',
+                                'cursor-pointer ',
                                 option.disable && 'cursor-default text-muted-foreground',
                               )}
                             >

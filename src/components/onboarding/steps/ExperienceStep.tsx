@@ -45,6 +45,12 @@ export default function ExperienceStep({
             description: "Working on the first version",
           },
           {
+            value: "fundraising",
+            label: "Fundraising",
+            icon: "💸",
+            description: "Seeking investment",
+          },
+          {
             value: "launched",
             label: "Already launched",
             icon: "🚀",
@@ -55,6 +61,18 @@ export default function ExperienceStep({
             label: "Scaling up",
             icon: "📈",
             description: "Growing and expanding",
+          },
+          {
+            value: "profitable",
+            label: "Profitable",
+            icon: "💰",
+            description: "Generating consistent revenue",
+          },
+          {
+            value: "acquired",
+            label: "Acquired",
+            icon: "🎉",
+            description: "Successfully sold or merged",
           },
         ].map((option) => (
           <motion.div

@@ -11,36 +11,9 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { MultipleSelector } from "@/components/ui/multiple-selector";
+import { countryOptions, languageOptions } from "./constants";
 
-const languageOptions = [
-  { value: "English", label: "English", category: "Common" },
-  { value: "Spanish", label: "Spanish", category: "Common" },
-  { value: "Mandarin", label: "Mandarin", category: "Asian" },
-  { value: "Hindi", label: "Hindi", category: "Asian" },
-  { value: "Arabic", label: "Arabic", category: "Middle Eastern" },
-  { value: "French", label: "French", category: "European" },
-  { value: "German", label: "German", category: "European" },
-  { value: "Japanese", label: "Japanese", category: "Asian" },
-  { value: "Korean", label: "Korean", category: "Asian" },
-  { value: "Portuguese", label: "Portuguese", category: "European" },
-  { value: "Russian", label: "Russian", category: "European" },
-  { value: "Italian", label: "Italian", category: "European" },
-];
 
-const countryOptions = [
-  { value: "United States", label: "🇺🇸 United States" },
-  { value: "United Kingdom", label: "🇬🇧 United Kingdom" },
-  { value: "Canada", label: "🇨🇦 Canada" },
-  { value: "Australia", label: "🇦🇺 Australia" },
-  { value: "Germany", label: "🇩🇪 Germany" },
-  { value: "France", label: "🇫🇷 France" },
-  { value: "India", label: "🇮🇳 India" },
-  { value: "China", label: "🇨🇳 China" },
-  { value: "Japan", label: "🇯🇵 Japan" },
-  { value: "Brazil", label: "🇧🇷 Brazil" },
-  { value: "Singapore", label: "🇸🇬 Singapore" },
-  { value: "UAE", label: "🇦🇪 UAE" },
-];
 
 interface LookingForStepProps {
   data: {
@@ -109,9 +82,7 @@ export default function LookingForStep({
   data,
   updateData,
 }: LookingForStepProps) {
-  const [customSkills, setCustomSkills] = useState<{ [key: string]: string }>(
-    {}
-  );
+  const [customSkills, setCustomSkills] = useState<{ [key: string]: string }>({});
 
   const handleSkillToggle = (skill: string) => {
     const currentSkills = data.skillsLookingFor || [];
@@ -124,9 +95,8 @@ export default function LookingForStep({
   const handleAddCustomSkill = (category: string) => {
     if (customSkills[category]?.trim()) {
       const newSkill = `${category}:${customSkills[category].trim()}`;
-      const currentSkills = data.skillsLookingFor || [];
-      if (!currentSkills.includes(newSkill)) {
-        updateData("skillsLookingFor", [...currentSkills, newSkill]);
+      if (!(data.skillsLookingFor || []).includes(newSkill)) {
+        updateData("skillsLookingFor", [...(data.skillsLookingFor || []), newSkill]);
       }
       setCustomSkills({ ...customSkills, [category]: "" });
     }
@@ -262,7 +232,7 @@ export default function LookingForStep({
                   label: lang,
                 })) || []
               }
-              groupBy="category"
+              groupBy=""
               onChange={(newValue) => {
                 updateData(
                   "languagesLookingFor",

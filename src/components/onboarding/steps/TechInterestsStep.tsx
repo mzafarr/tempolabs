@@ -1,11 +1,5 @@
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import InterestAccordion from "./shared/InterestAccordion";
 
 interface TechInterestsStepProps {
   data: {
@@ -69,43 +63,16 @@ export default function TechInterestsStep({
         <h2 className="text-2xl font-bold">What excites you? ⚡</h2>
         <p className="text-gray-600">Select your tech interests</p>
       </div>
-      <Accordion type="single" collapsible className="w-full space-y-2">
-        {techCategories.map((category) => (
-          <AccordionItem value={category.name} key={category.name}>
-            <AccordionTrigger className="text-left hover:no-underline hover:bg-slate-50 rounded-lg px-4">
-              <div className="flex items-center gap-2">
-                <span>{category.name}</span>
-                {data.interests.some((i) => category.interests.includes(i)) && (
-                  <Badge variant="secondary" className="ml-2">
-                    {data.interests.filter((i) => category.interests.includes(i)).length}
-                  </Badge>
-                )}
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-4">
-              <div className="pt-4">
-                <div className="flex flex-wrap gap-2">
-                  {category.interests.map((interest) => (
-                    <Badge
-                      key={interest}
-                      variant={data.interests.includes(interest) ? "default" : "outline"}
-                      className="cursor-pointer font-medium text-sm py-1 px-3 rounded-full"
-                      onClick={() => {
-                        const newInterests = data.interests.includes(interest)
-                          ? data.interests.filter((i) => i !== interest)
-                          : [...data.interests, interest];
-                        updateData("interests", newInterests);
-                      }}
-                    >
-                      {interest}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <InterestAccordion
+        categories={techCategories}
+        selectedInterests={data.interests}
+        onInterestToggle={(interest) => {
+          const newInterests = data.interests.includes(interest)
+            ? data.interests.filter((i) => i !== interest)
+            : [...data.interests, interest];
+          updateData("interests", newInterests);
+        }}
+      />
     </motion.div>
   );
 }

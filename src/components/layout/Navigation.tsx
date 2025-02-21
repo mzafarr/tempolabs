@@ -14,7 +14,7 @@ export default function Navigation() {
   return (
     <>
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden">
+      <nav className="z-50 fixed bottom-0 left-0 right-0 bg-white/85 backdrop-blur-sm border-t border-gray-200/60 md:hidden">
         <div className="flex justify-around items-center h-16">
           {links.map((link) => {
             const Icon = link.icon;
@@ -23,7 +23,9 @@ export default function Navigation() {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`flex flex-col items-center justify-center flex-1 h-full ${isActive ? "text-primary" : "text-gray-500"}`}
+                className={`flex flex-col items-center justify-center flex-1 h-full ${
+                  isActive ? "text-primary" : "text-gray-500"
+                }`}
               >
                 <Icon className="h-5 w-5" />
                 <span className="text-xs mt-1">{link.label}</span>
@@ -47,7 +49,9 @@ export default function Navigation() {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className={`flex items-center gap-2 ${isActive ? "text-primary" : "text-gray-500"}`}
+                    className={`flex items-center gap-2 ${
+                      isActive ? "text-primary" : "text-gray-500"
+                    }`}
                   >
                     <Icon className="h-5 w-5" />
                     <span>{link.label}</span>

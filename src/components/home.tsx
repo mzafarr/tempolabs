@@ -10,7 +10,7 @@ export default function Home() {
   const { user } = useAuth();
 
   return (
-    <div className="flex mx-auto px-4 py-8">
+    <div className="flex mx-auto px-2 sm:px-4 py-8">
       {user ? (
         <Suspense fallback={<div className="text-center">Loading...</div>}>
           <OnboardingCard

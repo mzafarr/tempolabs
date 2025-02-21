@@ -164,7 +164,7 @@ export type Database = {
           countries_looking_for?: string[] | null
           name?: string | null
           photo_url?: string | null
-          role?: string[] | null
+          roles?: string[] | null
           skills?: string[] | null
           stage?: string | null
           updated_at?: string
