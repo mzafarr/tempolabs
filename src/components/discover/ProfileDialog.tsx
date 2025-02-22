@@ -54,7 +54,7 @@ export default function ProfileDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[480px] h-[600px] p-0 gap-0 overflow-hidden bg-gray-950/95 text-white border-none">
+      <DialogContent className="w-[480px] h-[600px] p-0 gap-0 overflow-hidden /95 text-white border-none">
         <div className="h-full overflow-y-auto">
           <div className="relative h-64">
             <img

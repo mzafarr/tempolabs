@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { MultipleSelector } from "@/components/ui/multiple-selector";
 import { cn } from "@/lib/utils";
-import { countryOptions } from "./constants";
+import { countryOptions, languageOptions } from "./constants";
 import LocationSelector from "@/components/ui/location-input";
 
 interface BasicInfoStepProps {
@@ -46,7 +46,7 @@ export default function BasicInfoStep({
       className="space-y-4"
     >
       <h2 className="text-2xl font-bold">Let's get to know you! 👋</h2>
-      <div className="flex flex-col gap-4 mb-6">
+      <div className="flex flex-col gap-2 sm:gap-4 mb-6">
         <div className="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-2xl">
           {[0, 1, 2].map((index) => (
             <div key={index} className="relative group aspect-square">
@@ -92,7 +92,7 @@ export default function BasicInfoStep({
                   </button>
                 </div>
               ) : (
-                <label className="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                <label className="w-full h-full flex flex-col items-center justify-center border-[1.5px] border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
                   <input
                     type="file"
                     accept="image/*"
@@ -194,7 +194,7 @@ export default function BasicInfoStep({
                   whileTap={{ scale: 0.98 }}
                 >
                   <button
-                    className={`w-full p-2 md:py-2 rounded-lg border-2 transition-all ${
+                    className={`w-full p-2 md:py-2 rounded-lg border-[1.5px] transition-all ${
                       data.basicInfo.gender === gender.id
                         ? "border-primary bg-blue-50"
                         : "border-gray-200 hover:border-blue-200"
@@ -227,7 +227,7 @@ export default function BasicInfoStep({
                     })
                   }
                   className={cn(
-                    "flex flex-col items-center p-3 border rounded-lg transition-colors h-full",
+                    "tracking-tighter flex flex-col items-center p-3 border rounded-lg transition-colors h-full",
                     data.basicInfo.age === age.value
                       ? "border-primary bg-primary/5"
                       : "hover:border-primary"
@@ -299,26 +299,12 @@ export default function BasicInfoStep({
   );
 }
 
-const languageOptions = [
-  { value: "English", label: "English", category: "Common" },
-  { value: "Spanish", label: "Spanish", category: "Common" },
-  { value: "Mandarin", label: "Mandarin", category: "Asian" },
-  { value: "Hindi", label: "Hindi", category: "Asian" },
-  { value: "Arabic", label: "Arabic", category: "Middle Eastern" },
-  { value: "French", label: "French", category: "European" },
-  { value: "German", label: "German", category: "European" },
-  { value: "Japanese", label: "Japanese", category: "Asian" },
-  { value: "Korean", label: "Korean", category: "Asian" },
-  { value: "Portuguese", label: "Portuguese", category: "European" },
-  { value: "Russian", label: "Russian", category: "European" },
-  { value: "Italian", label: "Italian", category: "European" },
-];
 
 const ageRanges = [
-  { value: "Under 18", label: "Under 18", emoji: "👶" },
-  { value: "18+", label: "18+", emoji: "🎓" },
-  { value: "20s", label: "20s", emoji: "💼" },
-  { value: "30s", label: "30s", emoji: "👨‍💼" },
-  { value: "40s", label: "40s", emoji: "👨‍💻" },
-  { value: "50+", label: "50+", emoji: "🎯" },
+  { value: "Under 18", label: "Under 18", emoji: "🧒" },    // Kid face for youth
+  { value: "18+", label: "18+", emoji: "🧑" },             // Neutral adult for entering adulthood
+  { value: "20s", label: "20s", emoji: "🧑‍🎓" },           // Student emoji for the 20s
+  { value: "30s", label: "30s", emoji: "🧑‍💼" },           // Professional face for career-focused 30s
+  { value: "40s", label: "40s", emoji: "🧑‍🦱" },           // Mature adult with styled hair
+  { value: "50+", label: "50+", emoji: "🧓" },             // Older adult face for 50 and beyond
 ];

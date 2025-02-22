@@ -33,7 +33,7 @@ function AppContent() {
   return (
     <OnboardingProvider>
       {user && <Navigation />}
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen ">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/onboarding" element={<Home />} />

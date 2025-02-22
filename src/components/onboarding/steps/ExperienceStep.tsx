@@ -81,7 +81,7 @@ export default function ExperienceStep({
             whileTap={{ scale: 0.98 }}
           >
             <button
-              className={`w-full p-4 rounded-lg border-2 transition-all ${data.stage === option.value ? "border-primary bg-blue-50" : "border-gray-200 hover:border-blue-200"}`}
+              className={`w-full p-4 rounded-lg border-[1.5px] transition-all ${data.stage === option.value ? "border-primary bg-blue-50" : "border-gray-200 hover:border-blue-200"}`}
               onClick={() => updateData("stage", option.value)}
             >
               <div className="text-2xl mb-2">{option.icon}</div>

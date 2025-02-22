@@ -7,7 +7,7 @@ export default function EmptyCard() {
   return (
     <Card className="w-full max-w-md mx-auto overflow-hidden bg-black/90 text-white relative h-[600px] flex flex-col items-center justify-center p-6 text-center">
       <div className="space-y-6">
-        <div className="rounded-full bg-gray-800 p-4 inline-block">
+        <div className="rounded-full  p-4 inline-block">
           <RefreshCw className="h-8 w-8" />
         </div>
         <div className="space-y-2">

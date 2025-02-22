@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 interface CollabPrefsStepProps {
   data: {
-    lookingFor: string[];
+    lookingFor: string;
   };
   updateData: (field: string, value: any) => void;
 }
@@ -54,13 +54,8 @@ export default function CollabPrefsStep({
             whileTap={{ scale: 0.98 }}
           >
             <button
-              className={`w-full p-4 rounded-lg border-2 transition-all ${data.lookingFor.includes(pref.value) ? "border-primary bg-blue-50" : "border-gray-200 hover:border-blue-200"}`}
-              onClick={() => {
-                const newPrefs = data.lookingFor.includes(pref.value)
-                  ? data.lookingFor.filter((p) => p !== pref.value)
-                  : [...data.lookingFor, pref.value];
-                updateData("lookingFor", newPrefs);
-              }}
+              className={`w-full p-4 rounded-lg border-[1.5px] transition-all ${data.lookingFor === pref.value ? "border-primary bg-blue-50" : "border-gray-200 hover:border-blue-200"}`}
+              onClick={() => updateData("lookingFor", pref.value)}
             >
               <div className="text-2xl mb-2">{pref.icon}</div>
               <div className="font-medium">{pref.label}</div>

@@ -22,14 +22,14 @@ export default function ProfileView() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
+      <div className="min-h-screen  p-4 flex items-center justify-center">
         <div className="text-gray-500">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen  p-4">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Cover Image and Profile Section */}
         <Card className="relative overflow-hidden">
@@ -74,7 +74,7 @@ export default function ProfileView() {
 
             {/* Links Section */}
             {profile.linkedin_url && (
-              <div className="flex gap-4 mt-4">
+              <div className="flexgap-2 sm:gap-4mt-4">
                 <a
                   href={profile.linkedin_url}
                   target="_blank"

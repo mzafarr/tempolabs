@@ -81,7 +81,7 @@ export default function StepContent({ step = "welcome" }: StepContentProps) {
   };
 
   return (
-    <div className="p-6 ">
+    <div className="p-4">
       {renderStepContent()}
     </div>
   );

@@ -16,14 +16,14 @@ export default function RoleStep({ data, updateData }: RoleStepProps) {
     >
       <div className="space-y-2">
         <h2 className="text-2xl font-bold">Choose your Primary Role</h2>
-        {/* <p className="text-gray-600">Choose your primary role</p> */}
+        <p className="text-gray-600">Select your role(s) - you can be versatile! 🎩</p>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-4">
         {[
           { id: "entrepreneur", label: "Entrepreneur", icon: "🚀" },
-          { id: "business", label: "Business", icon: "💼" },
+          { id: "business", label: "Business/Ops", icon: "💼" },
           { id: "investor", label: "Investor", icon: "💰" },
-          { id: "tech", label: "Technology", icon: "💻" },
+          { id: "tech", label: "Technology/Engineer", icon: "💻" },
           { id: "marketing", label: "Marketing/Sales", icon: "📈" },
           { id: "content", label: "Content Creator", icon: "🎥" },
           { id: "design", label: "Design/Product", icon: "🎨" },
@@ -35,12 +35,17 @@ export default function RoleStep({ data, updateData }: RoleStepProps) {
             whileTap={{ scale: 0.98 }}
           >
             <button
-              className={`w-full p-4 rounded-lg border-2 transition-all ${
+              className={`max-sm:text-sm tracking-tight w-full p-4 rounded-lg border-[1.5px] transition-all ${
                 data.roles.includes(role.label)
                   ? "border-primary bg-blue-50"
                   : "border-gray-200 hover:border-blue-200"
               }`}
-              onClick={() => updateData("roles", [role.label])}
+              onClick={() => {
+                const newRoles = data.roles.includes(role.label)
+                  ? data.roles.filter((r) => r !== role.label)
+                  : [...data.roles, role.label];
+                updateData("roles", newRoles);
+              }}
             >
               <div className="text-2xl mb-2">{role.icon}</div>
               <div className="font-medium">{role.label}</div>

@@ -118,14 +118,14 @@ export default function DiscoverView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="text-white">Loading profiles...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 flex flex-col">
+    <div className="min-h-screen  flex flex-col">
       <div className="flex-1 p-4">
         {currentProfile ? (
           <ProfileCard

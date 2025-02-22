@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useState } from "react";
+import InterestAccordion from "./shared/InterestAccordion";
 
 interface SkillsStepProps {
   data: {
@@ -18,59 +19,59 @@ interface SkillsStepProps {
   updateData: (field: string, value: any) => void;
 }
 
-const skillCategories = {
-  "Business/Management": [
-    "Project Management",
-    "Business Strategy",
-    "Finance",
-    "Leadership",
-    "Operations",
-    "Consulting",
-  ],
-  "Technology/Engineering": [
-    "Python",
-    "JavaScript",
-    "Data Science",
-    "AI",
-    "Machine Learning",
-    "Frontend",
-    "Backend",
-    "DevOps",
-    "No-Code",
-    "Automations",
-    "Cybersecurity",
-    "Cloud Computing",
-  ],
-  "Content Creator": [
-    "Blogging",
-    "YouTube",
-    "TikTok",
-    "Podcasting",
-    "Content Strategy",
-    "Video Editing",
-  ],
-  "Design/Product": [
-    "UI/UX",
-    "Product Development",
-    "Graphic Design",
-    "User Research",
-    "Prototyping",
-  ],
-  Investor: [
-    "Angel Investor",
-    "Venture Capitalist",
-    "Crowdfunding Expert",
-    "Financial Analysis",
-  ],
-  "Marketing/Sales": [
-    "Facebook Ads",
-    "Copywriting",
-    "Lead Generation",
-    "SEO/SEM",
-    "Social Media Marketing",
-    "Email Marketing",
-  ],
-};
+// const skillCategories = {
+//   "Business/Management": [
+//     "Project Management",
+//     "Business Strategy",
+//     "Finance",
+//     "Leadership",
+//     "Operations",
+//     "Consulting",
+//   ],
+//   "Technology/Engineering": [
+//     "Python",
+//     "JavaScript",
+//     "Data Science",
+//     "AI",
+//     "Machine Learning",
+//     "Frontend",
+//     "Backend",
+//     "DevOps",
+//     "No-Code",
+//     "Automations",
+//     "Cybersecurity",
+//     "Cloud Computing",
+//   ],
+//   "Content Creator": [
+//     "Blogging",
+//     "YouTube",
+//     "TikTok",
+//     "Podcasting",
+//     "Content Strategy",
+//     "Video Editing",
+//   ],
+//   "Design/Product": [
+//     "UI/UX",
+//     "Product Development",
+//     "Graphic Design",
+//     "User Research",
+//     "Prototyping",
+//   ],
+//   Investor: [
+//     "Angel Investor",
+//     "Venture Capitalist",
+//     "Crowdfunding Expert",
+//     "Financial Analysis",
+//   ],
+//   "Marketing/Sales": [
+//     "Facebook Ads",
+//     "Copywriting",
+//     "Lead Generation",
+//     "SEO/SEM",
+//     "Social Media Marketing",
+//     "Email Marketing",
+//   ],
+// };
 
 export default function SkillsStep({ data, updateData }: SkillsStepProps) {
   const [customSkills, setCustomSkills] = useState<{ [key: string]: string }>(
@@ -105,70 +106,10 @@ export default function SkillsStep({ data, updateData }: SkillsStepProps) {
         <p className="text-gray-600">Select all that apply</p>
       </div>
 
-      <Accordion type="single" collapsible className="w-full space-y-2">
-        {Object.entries(skillCategories).map(([category, skills]) => (
-          <AccordionItem value={category} key={category}>
-            <AccordionTrigger className="text-left hover:no-underline hover:bg-slate-50 rounded-lg px-4">
-              <div className="flex items-center gap-2">
-                <span>{category}</span>
-                {data.skills.some(
-                  (s) => s.startsWith(category + ":") || skills.includes(s),
-                ) && (
-                  <Badge variant="secondary" className="ml-2">
-                    {
-                      data.skills.filter(
-                        (s) =>
-                          s.startsWith(category + ":") || skills.includes(s),
-                      ).length
-                    }
-                  </Badge>
-                )}
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-4">
-              <div className="pt-4 space-y-4">
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill) => (
-                    <Badge
-                      key={skill}
-                      variant={
-                        data.skills.includes(skill) ? "default" : "outline"
-                      }
-                      className="cursor-pointer text-sm py-1 px-3"
-                      onClick={() => handleSkillToggle(skill)}
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Add custom skill"
-                    value={customSkills[category] || ""}
-                    onChange={(e) =>
-                      setCustomSkills({
-                        ...customSkills,
-                        [category]: e.target.value,
-                      })
-                    }
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter") {
-                        handleAddCustomSkill(category);
-                      }
-                    }}
-                  />
-                  <Button
-                    variant="outline"
-                    onClick={() => handleAddCustomSkill(category)}
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <InterestAccordion
+        selectedInterests={data.skills}
+        onInterestToggle={handleAddCustomSkill}
+      />
 
       {data.skills.length > 0 && (
         <div className="pt-4">

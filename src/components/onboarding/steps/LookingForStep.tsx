@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { MultipleSelector } from "@/components/ui/multiple-selector";
 import { countryOptions, languageOptions } from "./constants";
+import InterestAccordion from "./shared/InterestAccordion";
 
 
 
@@ -25,7 +26,7 @@ interface LookingForStepProps {
 }
 
 const skillCategories = {
-  "Business/Management 💼": [
+  "Business/Ops 💼": [
     "Project Management",
     "Business Strategy", 
     "Finance",
@@ -34,8 +35,8 @@ const skillCategories = {
     "Consulting",
   ],
   "Technology/Engineering 💻": [
-    "Python",
-    "JavaScript", 
+    // "Python",
+    // "JavaScript", 
     "Data Science",
     "AI",
     "Machine Learning",
@@ -117,75 +118,10 @@ export default function LookingForStep({
         </p>
       </div>
 
-      <Accordion type="single" collapsible className="w-full space-y-2">
-        {Object.entries(skillCategories).map(([category, skills]) => (
-          <AccordionItem value={category} key={category}>
-            <AccordionTrigger className="text-left hover:no-underline hover:bg-slate-50 rounded-lg px-4">
-              <div className="flex items-center gap-2">
-                <span>{category}</span>
-                {(data.skillsLookingFor || []).some(
-                  (s) => s.startsWith(category + ":") || skills.includes(s)
-                ) && (
-                  <Badge
-                    variant="secondary"
-                    className="ml-2 bg-primary/10 hover:bg-primary/20 border-primary/5 text-primary font-normal"
-                  >
-                    {
-                      (data.skillsLookingFor || []).filter(
-                        (s) =>
-                          s.startsWith(category + ":") || skills.includes(s)
-                      ).length
-                    }
-                  </Badge>
-                )}
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-4">
-              <div className="pt-4 space-y-4">
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill) => (
-                    <Badge
-                      key={skill}
-                      variant={
-                        (data.skillsLookingFor || []).includes(skill)
-                          ? "default"
-                          : "outline"
-                      }
-                      className="cursor-pointer font-normal text-[13.5px] py-0.5 px-3 bg-primary/10 hover:bg-primary/20 border-primary/5 text-primary"
-                      onClick={() => handleSkillToggle(skill)}
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Add custom skill"
-                    value={customSkills[category] || ""}
-                    onChange={(e) =>
-                      setCustomSkills({
-                        ...customSkills,
-                        [category]: e.target.value,
-                      })
-                    }
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter") {
-                        handleAddCustomSkill(category);
-                      }
-                    }}
-                  />
-                  <Button
-                    variant="outline"
-                    onClick={() => handleAddCustomSkill(category)}
-                  >
-                    Add
-                  </Button>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <InterestAccordion
+        selectedInterests={data.skillsLookingFor}
+        onInterestToggle={handleSkillToggle}
+      />
 
       {(data.skillsLookingFor || []).length > 0 && (
         <div className="pt-4">

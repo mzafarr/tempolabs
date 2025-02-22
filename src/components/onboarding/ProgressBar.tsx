@@ -31,7 +31,7 @@ const ProgressBar = ({
   return (
     <div className="w-full bg-white p-4 space-y-2">
       <motion.div
-        className="w-full h-2 bg-gray-100 rounded-full overflow-hidden"
+        className="w-full h-2 bg-primary/10 rounded-full overflow-hidden"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}

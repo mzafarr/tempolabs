@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { getProfile } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,22 @@ import { Bell, Shield, Globe, LogOut } from "lucide-react";
 import { signOut } from "@/lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabase";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function SettingsView() {
   const { data, updateData } = useOnboarding();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -49,8 +62,38 @@ export default function SettingsView() {
     navigate("/onboarding");
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      setIsDeleting(true);
+      const { error: deleteError } = await supabase.rpc('delete_user_data');
+      
+      if (deleteError) throw deleteError;
+
+      const { error: authError } = await supabase.auth.admin.deleteUser(
+        (await supabase.auth.getUser()).data.user?.id || ''
+      );
+
+      if (authError) throw authError;
+
+      toast({
+        title: "Success",
+        description: "Your account has been deleted successfully.",
+      });
+
+      navigate("/");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete account",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen  p-4">
       <div className="max-w-2xl mx-auto space-y-6">
         <h1 className="text-2xl font-bold">Settings</h1>
 
@@ -128,9 +171,32 @@ export default function SettingsView() {
         <Card className="p-6 space-y-6 bg-red-50">
           <h2 className="text-lg font-semibold text-red-600">Danger Zone</h2>
           <div className="space-y-4">
-            <Button variant="destructive" className="w-full">
-              Delete Account
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="w-full">
+                  Delete Account
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your
+                    account and remove all of your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeleteAccount}
+                    className="bg-red-600 hover:bg-red-700"
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Delete Account"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </Card>
       </div>

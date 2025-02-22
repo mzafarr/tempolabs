@@ -46,9 +46,9 @@ export default function OnboardingCard({
   currentStep = "welcome",
   onStepChange = () => {},
 }: OnboardingCardProps) {
-  const [step, setStep] = useState<Step>(currentStep);
   const navigate = useNavigate();
   const { data, updateData } = useOnboarding();
+  const [step, setStep] = useState<Step>(currentStep);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -57,15 +57,29 @@ export default function OnboardingCard({
         updateData("basicInfo", {
           name: profile.name || "",
           email: profile.email || "",
+          gender: profile.gender || "",
+          age: profile.age || "",
+          country: profile.country || "",
+          languages: profile.languages || [],
         });
         updateData("roles", profile.role || []);
         updateData("stage", profile.stage || "");
         updateData("interests", profile.interests || []);
         updateData("skills", profile.skills || []);
         updateData("lookingFor", profile.looking_for || []);
+        updateData("skillsLookingFor", profile.skills_looking_for || []);
+        updateData("languagesLookingFor", profile.languages_looking_for || []);
+        updateData("countriesLookingFor", profile.countries_looking_for || []);
         updateData("bio", profile.bio || "");
         updateData("photoUrls", profile.photo_urls || []);
         updateData("linkedinUrl", profile.linkedin_url || "");
+        updateData("websiteUrl", profile.website_url || "");
+        updateData("twitterUrl", profile.twitter_url || "");
+        updateData("githubUrl", profile.github_url || "");
+        updateData("tiktokUrl", profile.tiktok_url || "");
+        updateData("instagramUrl", profile.instagram_url || "");
+        updateData("youtubeUrl", profile.youtube_url || "");
+        updateData("otherUrl", profile.other_url || "");
       }
     };
     loadProfile();
@@ -136,7 +150,7 @@ export default function OnboardingCard({
         currentStep={currentStepIndex + 1}
         totalSteps={steps.length}
       />
-      <Card className="max-w-[94vw] w-[600px] min-h-[600px] mx-auto bg-white shadow-lg rounded-xl flex flex-col pb-8 md:pb-0">
+      <Card className="max-sm:border-none max-sm:shadow-none max-w-[94vw] w-[600px] min-h-[600px] mx-auto shadow-lg rounded-xl flex flex-col pb-8 md:pb-0">
         <div className="flex-1">
           <StepContent step={step} />
         </div>
